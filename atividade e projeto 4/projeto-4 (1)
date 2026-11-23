@@ -1,0 +1,258 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define TAM 10
+
+
+void exibirCabecalho(void);
+void lerPontuacoes(int v[], int n);
+void copiarVetor(int origem[], int destino[], int n);
+void exibirVetor(int v[], int n);
+int bubbleSort(int v[], int n);
+int selectionSort(int v[], int n);
+int insertionSort(int v[], int n);
+int vetoresIguais(int a[], int b[], int n);
+
+int main(void) {
+
+    int original[TAM];
+    int bubble[TAM];
+    int selection[TAM];
+    int insertion[TAM];
+
+    int compBubble;
+    int compSelection;
+    int compInsertion;
+
+    double mediana;
+
+    
+    exibirCabecalho();
+
+    
+    lerPontuacoes(original, TAM);
+
+   
+    printf("\nOriginal: ");
+    exibirVetor(original, TAM);
+
+   
+    copiarVetor(original, bubble, TAM);
+    copiarVetor(original, selection, TAM);
+    copiarVetor(original, insertion, TAM);
+
+   
+    compBubble = bubbleSort(bubble, TAM);
+    compSelection = selectionSort(selection, TAM);
+    compInsertion = insertionSort(insertion, TAM);
+
+    
+    printf("\nBubble: ");
+    exibirVetor(bubble, TAM);
+
+    printf("Selection: ");
+    exibirVetor(selection, TAM);
+
+    printf("Insertion: ");
+    exibirVetor(insertion, TAM);
+
+    
+    if (vetoresIguais(bubble, selection, TAM) &&
+        vetoresIguais(bubble, insertion, TAM)) {
+
+        printf("\nResultados equivalentes: SIM\n");
+
+    } else {
+
+        printf("\nResultados equivalentes: NAO\n");
+    }
+
+
+
+    mediana = (bubble[4] + bubble[5]) / 2.0;
+
+    printf("\nMenor: %d", bubble[0]);
+    printf(" | Maior: %d", bubble[TAM - 1]);
+    printf(" | Mediana: %.2f\n", mediana);
+
+    printf("\nComparacoes:");
+    printf(" Bubble %d", compBubble);
+    printf(" | Selection %d", compSelection);
+    printf(" | Insertion %d\n", compInsertion);
+
+    printf("=============================\n");
+
+    return 0;
+}
+
+
+void exibirCabecalho(void) {
+
+    printf("========== RANKLAB ==========\n");
+    printf("Digite 10 pontuacoes entre 0 e 100:\n");
+}
+
+
+void lerPontuacoes(int v[], int n) {
+
+    int i = 0;
+    int valor;
+    int caractere;
+
+    while (i < n) {
+
+        if (scanf("%d", &valor) != 1) {
+
+            printf("Entrada invalida! Digite um numero inteiro: ");
+
+            while ((caractere = getchar()) != '\n' &&
+                   caractere != EOF) {
+            }
+
+            if (caractere == EOF) {
+                exit(EXIT_FAILURE);
+            }
+
+        } else if (valor < 0 || valor > 100) {
+
+            printf("Pontuacao invalida! Digite entre 0 e 100: ");
+
+        } else {
+
+            v[i] = valor;
+            i++;
+        }
+    }
+}
+
+
+void copiarVetor(int origem[], int destino[], int n) {
+
+    int i;
+
+    for (i = 0; i < n; i++) {
+
+        destino[i] = origem[i];
+    }
+}
+
+
+void exibirVetor(int v[], int n) {
+
+    int i;
+
+    for (i = 0; i < n; i++) {
+
+        printf("%d ", v[i]);
+    }
+
+    printf("\n");
+}
+
+
+int bubbleSort(int v[], int n) {
+
+    int i, j;
+    int auxiliar;
+    int comparacoes = 0;
+
+    for (i = 0; i < n - 1; i++) {
+
+        for (j = 0; j < n - 1 - i; j++) {
+
+            comparacoes++;
+
+            if (v[j] > v[j + 1]) {
+
+                auxiliar = v[j];
+                v[j] = v[j + 1];
+                v[j + 1] = auxiliar;
+            }
+        }
+    }
+
+    return comparacoes;
+}
+
+
+int selectionSort(int v[], int n) {
+
+    int i, j;
+    int menor;
+    int auxiliar;
+    int comparacoes = 0;
+
+    for (i = 0; i < n - 1; i++) {
+
+        menor = i;
+
+        for (j = i + 1; j < n; j++) {
+
+            comparacoes++;
+
+            if (v[j] < v[menor]) {
+
+                menor = j;
+            }
+        }
+
+        if (menor != i) {
+
+            auxiliar = v[i];
+            v[i] = v[menor];
+            v[menor] = auxiliar;
+        }
+    }
+
+    return comparacoes;
+}
+
+
+int insertionSort(int v[], int n) {
+
+    int i, j;
+    int chave;
+    int comparacoes = 0;
+
+    for (i = 1; i < n; i++) {
+
+        chave = v[i];
+        j = i - 1;
+
+        while (j >= 0) {
+
+            comparacoes++;
+
+            if (v[j] > chave) {
+
+                v[j + 1] = v[j];
+                j--;
+
+            } else {
+
+                break;
+            }
+        }
+
+        v[j + 1] = chave;
+    }
+
+    return comparacoes;
+}
+
+
+int vetoresIguais(int a[], int b[], int n) {
+
+    int i;
+
+    for (i = 0; i < n; i++) {
+
+        if (a[i] != b[i]) {
+
+            return 0;
+        }
+    }
+
+    return 1;
+}
